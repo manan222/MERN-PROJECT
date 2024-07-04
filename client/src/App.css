@@ -1,0 +1,19 @@
+.css-10botns-MuiInputBase-input-MuiFilledInput-input  {
+    padding: 10px !important; 
+   font-size: 0.8rem !important;
+}
+/* .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root {
+  
+} */
+.css-ahj2mt-MuiTypography-root {
+    font-size: 0.8rem !important;
+}
+
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+width:78%;
+}
+/* .css-mhc70k-MuiGrid-root  {width:auto} */
+
+.css-1u3bzj6-MuiFormControl-root-MuiTextField-root {
+    width:100%;
+}
