@@ -1,9 +1,11 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Header from "./componets/Header";
 import React from "react";
-import Login from "./componets/LoginSignup";
-import AddUserVehicle from "./componets/AddUserVehicle";
+import CreateUpdateTask from "./containers/CreateUpdateTask";
+import TaskListing from "./containers/TaskListing";
+import Header from "./componets/Header";
+
+
 
 // import Route from "./protectedRoutes/ProtectedRoute";
 
@@ -17,25 +19,21 @@ function App() {
       </header>
       <main>
         <Routes>
-          {!isAuthenticated ? (
-            <Route path="/login" element={<Login />}></Route>
-          ) : (
-            <>
-
-              <Route
-                path="/user/vehicle"
-                isAuthenticated={isAuthenticated}
-                element={<AddUserVehicle />}
-              ></Route>
-              <Route
-                path="/"
-                isAuthenticated={isAuthenticated}
-                element={<AddUserVehicle />}
-              ></Route>
-              <Route path="/signup" element={<Login />}></Route>
-
-            </>
-          )}
+          <Route
+            path="/task"
+            isAuthenticated={isAuthenticated}
+            element={<CreateUpdateTask />}
+          ></Route>
+          <Route
+            path="/task/:id"
+            isAuthenticated={isAuthenticated}
+            element={<CreateUpdateTask />}
+          ></Route>
+          <Route
+            path="/"
+            isAuthenticated={isAuthenticated}
+            element={<TaskListing />}
+          ></Route>
         </Routes>
       </main>
     </React.Fragment>
