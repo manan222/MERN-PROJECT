@@ -9,9 +9,9 @@ import { useNavigate } from "react-router-dom";
 export default function TaskListing() {
   const navigate = useNavigate();
   const columns = [
-    { field: '_id', headerName: 'Id', width: 270, sortable: true, },
+    // { field: '_id', headerName: 'Id', width: 270, sortable: true, },
     { field: 'title', headerName: 'Title', width: 270, sortable: true, },
-    { field: 'description', headerName: 'Description', width: 230, sortable: true, },
+    { field: 'description', headerName: 'Description', width: 530, sortable: true, },
     { field: 'priority', headerName: 'Priority', width: 130, sortable: true, },
     {
       field: 'status',
@@ -26,7 +26,11 @@ export default function TaskListing() {
       description: 'Task Deadline.',
       sortable: true,
       width: 130,
-      valueGetter: (value, row) => new Date(row.deadline).toLocaleDateString(),
+      valueGetter: (value, row) => {
+        const date = row.deadline.split('T')[0];
+        console.log('formatted date-------->', date); // Output: 2024-09-24
+        return date;
+      },
     },
     {
       field: 'action',
@@ -91,12 +95,12 @@ export default function TaskListing() {
         <Button variant='contained' onClick={() => navigate('/task')}>Add Task</Button>
       </div>
 
-      <Paper sx={{ height: "100%", width: '100%', marginTop: "70px" }}>
+      <Paper sx={{ height: "100%", width: '70%', marginTop: "70px", marginLeft: "300px" }}>
         {rows.length > 0 && <DataGrid
           rows={rows}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5, 10, 20, 50]}
           // checkboxSelection
           sx={{ border: 0 }}
         />}
