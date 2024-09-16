@@ -1,12 +1,9 @@
-import { Box, Button, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useStyles } from "../componets/utils";
 import Snackbar from '@mui/material/Snackbar';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-
-
-
 
 const labelStyles = { mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" };
 const CreateUpdateTask = () => {
@@ -14,6 +11,7 @@ const CreateUpdateTask = () => {
   const params = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [showLoading, setShowLoading] = useState(false);
   const [dateHandler, setDateHandler] = useState(false);
   const [inputs, setInputs] = useState({
     title: "",
@@ -36,6 +34,7 @@ const CreateUpdateTask = () => {
     // getFormattedDate(e.target.value);
   };
   const handleTask = async () => {
+    setShowLoading(true);
     if (params.id) {
       try {
         console.log('handling task------>', inputs.deadline)
@@ -49,8 +48,12 @@ const CreateUpdateTask = () => {
           })
         const data = res.data;
         if (data.message.includes('Task updated successfully')) {
-          setIsNotificationOpen(true);
-          navigate('/');
+          setTimeout(() => {
+            setShowLoading(false);
+            setIsNotificationOpen(true);
+            navigate('/');
+
+          }, 1000);
         }
 
       }
@@ -70,8 +73,13 @@ const CreateUpdateTask = () => {
           })
         const data = res.data;
         if (data.message.includes('Task saved successfully')) {
-          setIsNotificationOpen(true);
-          navigate('/');
+          setTimeout(() => {
+            setShowLoading(false);
+            setIsNotificationOpen(true);
+            navigate('/');
+
+          }, 1000);
+
         }
 
       }
@@ -229,14 +237,25 @@ const CreateUpdateTask = () => {
           </InputLabel>
           <input type='date' id='deadline' name='deadline'
             value={getFormattedDate(inputs.deadline)}
+            style={{ height: "60px" }}
+            placeholder="Deadline"
+            className="input"
             onChange={handleChange} />
           <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <Button
-              variant="contained"
-              onClick={handleTask}
-            >
-              {params.id ? 'Update Task' : "Add Task"}
-            </Button>
+            {!showLoading &&
+              <Button
+                variant="contained"
+                onClick={handleTask}
+              >
+                {params.id ? 'Update Task' : "Add Task"}
+              </Button>
+            }
+            {showLoading &&
+              <Button variant='contained' classname='d-flex'>
+                <CircularProgress style={{ color: "white", marginRight: "10px" }} size='1.2rem' />
+                Loading
+              </Button>
+            }
             <Button variant='contained' color='error' onClick={() => navigate('/')} style={{ marginLeft: "7px", borderRadius: "4", mt: 2 }}>Cancel</Button>
           </div>
         </Box>
