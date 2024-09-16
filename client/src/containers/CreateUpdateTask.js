@@ -24,22 +24,17 @@ const CreateUpdateTask = () => {
   const [isNotificationOpen, setIsNotificationOpen] = React.useState(false);
 
   const handleChange = (e) => {
-    console.log('handle change date value:', e.target.value);
-    setDateHandler(true);
-
     setInputs((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
-    // getFormattedDate(e.target.value);
   };
   const handleTask = async () => {
     setShowLoading(true);
     if (params.id) {
       try {
-        console.log('handling task------>', inputs.deadline)
         const res = await axios
-          .put(`http://localhost:5000/api/v1/tasks/${params.id}`, {
+          .put(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks/${params.id}`, {
             title: inputs.title,
             description: inputs.description,
             priority: inputs.priority,
@@ -64,7 +59,7 @@ const CreateUpdateTask = () => {
     else {
       try {
         const res = await axios
-          .post("http://localhost:5000/api/v1/tasks", {
+          .post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks`, {
             title: inputs.title,
             description: inputs.description,
             priority: inputs.priority,
@@ -90,7 +85,6 @@ const CreateUpdateTask = () => {
 
   };
 
-
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -98,8 +92,6 @@ const CreateUpdateTask = () => {
 
     setIsNotificationOpen(false);
   };
-
-
 
   const statusOptions = ['To Do', 'In Progress', 'Completed'];
   const priorityOptions = ['Low', 'Medium', 'High'];
@@ -117,26 +109,18 @@ const CreateUpdateTask = () => {
 
   }, [params]);
 
-  useEffect(() => {
-    console.log('deadline----->', inputs.deadline);
-  }, [inputs])
-
   const getFormattedDate = (dateStr) => {
     if (dateHandler) {
-      console.log('formatted date--->', dateStr);
       return dateStr
     }
     else if (dateStr) {
-      console.log('date str', dateStr);
       const date = dateStr.split('T')[0];
-      console.log('date', date);
       return date;
     }
     else {
       return ""
     }
   }
-
 
   return (
     <div>

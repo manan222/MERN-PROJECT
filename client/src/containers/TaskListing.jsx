@@ -10,7 +10,6 @@ export default function TaskListing() {
   const navigate = useNavigate();
   const [showLoading, setShowLoading] = useState(false);
   const columns = [
-    // { field: '_id', headerName: 'Id', width: 270, sortable: true, },
     { field: 'title', headerName: 'Title', width: 270, sortable: true, },
     { field: 'description', headerName: 'Description', width: 530, sortable: true, },
     { field: 'priority', headerName: 'Priority', width: 130, sortable: true, },
@@ -29,7 +28,6 @@ export default function TaskListing() {
       width: 130,
       valueGetter: (value, row) => {
         const date = row.deadline.split('T')[0];
-        console.log('formatted date-------->', date); // Output: 2024-09-24
         return date;
       },
     },
@@ -55,9 +53,9 @@ export default function TaskListing() {
 
         const handleDelete = async () => {
           setShowLoading(true);
-          console.log('delete is called', params.row.id)
-          const response = axios.delete(`http://localhost:5000/api/v1/tasks/${params.row.id}`);
-          console.log('delete response:', response);
+          const response = await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks/${params.row.id}`);
+          console.log('delete responnse------------>', response);
+
           getTasks();
         }
 
@@ -78,8 +76,7 @@ export default function TaskListing() {
 
   const getTasks = async () => {
     setShowLoading(true);
-    const response = await axios.get('http://localhost:5000/api/v1/tasks');
-    console.log('tasks response', response.data.data);
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks`);
     const data = response.data.data;
     const updatedRows = data.map(row => {
       return {
@@ -106,18 +103,19 @@ export default function TaskListing() {
 
       ) :
         <Paper sx={{ height: "100%", width: '70%', marginTop: "70px", marginLeft: "300px" }}>
-          {rows.length > 0 && <DataGrid
+          {rows.length > 0 ? <DataGrid
             rows={rows}
             columns={columns}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10, 20, 50]}
             // checkboxSelection
             sx={{ border: 0 }}
-          />}
+          /> :
+            <div style={{ textAlign: "center", top: "50%", left: "50%", position: "absolute" }}>No Tasks to show</div>
+          }
 
         </Paper>
       }
-
     </>
   );
 }
